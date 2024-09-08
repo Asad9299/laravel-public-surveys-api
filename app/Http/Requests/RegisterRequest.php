@@ -23,13 +23,9 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'     => 'required | string',
-            'email'    => 'required | email | string | unique:users,email',
-            'password' =>  [
-                'required',
-                'confirmed',
-                Password::min(8)->mixedCase()->numbers()->symbols()
-            ]
+            'name'     => 'required|string|bail',
+            'email'    => 'bail|required|email|string|unique:users,email',
+            'password' => 'bail|required|confirmed|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
         ];
     }
 }
