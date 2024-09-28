@@ -14,9 +14,12 @@ class SurveyResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        // TODO: Add response columns as needed
         return [
-            'id'    => $this->id,
-            'title' => $this->title
+            'id'          => $this->id,
+            'title'       => $this->title,
+            'slug'        => $this->slug,
+            'expire_date' => $this->expire_date,
         ];
     }
 }
