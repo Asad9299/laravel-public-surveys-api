@@ -17,6 +17,7 @@ class SurveyResource extends JsonResource
         // TODO: Add response columns as needed
         return [
             'id'          => $this->id,
+            'image'       => $this->image,
             'title'       => $this->title,
             'description' => $this->description,
             'slug'        => $this->slug,
