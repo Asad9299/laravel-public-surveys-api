@@ -95,6 +95,9 @@ class SurveyController extends Controller
      */
     public function destroy(Survey $survey)
     {
-        //
+        if ($survey->remove()) {
+            return response('', 204);
+        }
+        return response('Something went wrong', 400);
     }
 }

@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class Survey extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = ['user_id', 'image', 'title', 'slug', 'status', 'description', 'expire_date'];
 
@@ -21,5 +22,10 @@ class Survey extends Model
     {
         $data['slug'] = Str::slug($data['title']);
         return self::create($data);
+    }
+
+    public function remove(): bool | null
+    {
+        return $this->delete();
     }
 }
