@@ -10,9 +10,9 @@ class Survey extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'title', 'slug', 'status', 'description'];
+    protected $fillable = ['user_id', 'image', 'title', 'slug', 'status', 'description'];
 
-    public static function list(int $user_id): Survey
+    public static function list(int $user_id)
     {
         return self::where('user_id', $user_id)->paginate();
     }
