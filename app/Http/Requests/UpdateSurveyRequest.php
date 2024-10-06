@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Survey;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 
 class UpdateSurveyRequest extends FormRequest
 {
@@ -11,7 +14,7 @@ class UpdateSurveyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +25,17 @@ class UpdateSurveyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title'       => 'required|string|max:1000',
+            'slug'        => [
+                'nullable',
+                Rule::unique('surveys', 'slug')->ignore($this->survey['id'])->withoutTrashed()
+            ],
+            'status'      => 'nullable|boolean',
+            'image'       => 'nullable|string',
+            'user_id'     => 'exists:users,id',
+            'description' => 'nullable|string',
+            'expire_date' => 'nullable|date|after:tomorrow',
+            'questions'   => 'array',
         ];
     }
 }

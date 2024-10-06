@@ -18,14 +18,19 @@ class Survey extends Model
         return self::where('user_id', $user_id)->paginate();
     }
 
-    public function add(array $data)
+    public function add(array $data): Survey
     {
-        $data['slug'] = Str::slug($data['title']);
+        $data['slug']   = Str::slug($data['title']);
         return self::create($data);
     }
 
     public function remove(): bool | null
     {
         return $this->delete();
+    }
+
+    public function edit(array $data): bool
+    {
+        return $this->update($data);
     }
 }

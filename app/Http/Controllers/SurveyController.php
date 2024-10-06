@@ -79,7 +79,7 @@ class SurveyController extends Controller
      */
     public function show(Survey $survey)
     {
-        //
+        return new SurveyResource($survey);
     }
 
     /**
@@ -87,7 +87,27 @@ class SurveyController extends Controller
      */
     public function update(UpdateSurveyRequest $request, Survey $survey)
     {
-        //
+        $data     = $request->validated();
+
+        if ($survey->slug) {
+            $data['slug'] = $survey->slug;
+        } else {
+            $data['slug']   = Str::slug($data['title']);
+        }
+
+        if (!empty($data['image'])) {
+            $imagePath = $this->getImagePath($data['image']);
+            $data['image'] = $imagePath;
+
+            // If there is an old image, delete it
+            if ($survey->image) {
+                $absolutePath = public_path($survey->image);
+                File::delete($absolutePath);
+            }
+        }
+
+        $survey->edit($data);
+        return new SurveyResource($survey);
     }
 
     /**

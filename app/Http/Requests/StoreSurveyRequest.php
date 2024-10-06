@@ -38,9 +38,9 @@ class StoreSurveyRequest extends FormRequest
             'slug'        => [
                 Rule::unique('surveys'),
             ],
+            'status'      => 'nullable|boolean',
             'image'       => 'nullable|string',
             'user_id'     => 'exists:users,id',
-            'status'      => 'required|boolean',
             'description' => 'nullable|string',
             'expire_date' => 'nullable|date|after:tomorrow',
             'questions'   => 'array',
