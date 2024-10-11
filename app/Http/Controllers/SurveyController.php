@@ -6,6 +6,7 @@ use App\Models\Survey;
 use App\Http\Requests\StoreSurveyRequest;
 use App\Http\Requests\UpdateSurveyRequest;
 use App\Http\Resources\SurveyResource;
+use App\Models\SurveyQuestion;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\File;
@@ -25,7 +26,7 @@ class SurveyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreSurveyRequest $request)
+    public function store(StoreSurveyRequest $request): SurveyResource
     {
 
         $data     = $request->validated();
@@ -37,7 +38,20 @@ class SurveyController extends Controller
 
         $survey   = new Survey();
         $response = $survey->add($data);
+
+        // Save Questions if they are not empty
+        if (!empty($data['questions'])) {
+            $this->saveQuestions($response->id, $data['questions']);
+        }
         return new SurveyResource($response);
+    }
+
+    private function saveQuestions(int $surveyId, array $questions): void
+    {
+        foreach ($questions as $question) {
+            $surveyQuestion = new SurveyQuestion();
+            $surveyQuestion->add($surveyId, $question);
+        }
     }
 
     private function getImagePath($image)

@@ -13,15 +13,21 @@ class Survey extends Model
 
     protected $fillable = ['user_id', 'image', 'title', 'slug', 'status', 'description', 'expire_date'];
 
+    public function questions()
+    {
+        return $this->hasMany(SurveyQuestion::class);
+    }
+
     public static function list(int $user_id)
     {
         return self::where('user_id', $user_id)->paginate();
     }
 
-    public function add(array $data): Survey
+    public function add(array $data)
     {
         $data['slug']   = Str::slug($data['title']);
-        return self::create($data);
+        $survey = self::create($data);
+        return $survey;
     }
 
     public function remove(): bool | null

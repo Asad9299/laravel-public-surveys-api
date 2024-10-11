@@ -23,7 +23,8 @@ class SurveyResource extends JsonResource
             'description' => $this->description,
             'slug'        => $this->slug,
             'expire_date' => Carbon::parse($this->expire_date)->format('Y-m-d'),
-            'status'      => 1 === $this->status ? true : false
+            'status'      => 1 === $this->status ? true : false,
+            'questions'   => SurveyQuestionResource::collection($this->questions)
         ];
     }
 }
