@@ -15,7 +15,7 @@ class SurveyQuestion extends Model
         $this->type         = $question['type'];
         $this->description  = $question['description'];
         $this->question     = $question['question'];
-        $this->data         = !empty($question['data']) ? json_encode($question['data']) : [];
+        $this->data         = !empty($question['data']) ? json_encode($question['data']) : json_encode([]);
         $this->save();
     }
 }
