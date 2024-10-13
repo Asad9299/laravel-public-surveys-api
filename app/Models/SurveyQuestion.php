@@ -9,7 +9,7 @@ class SurveyQuestion extends Model
 {
     use HasFactory;
 
-    public function add($surveyId, $question)
+    public function add(int $surveyId, array $question): void
     {
         $this->survey_id    = $surveyId;
         $this->type         = $question['type'];
@@ -17,5 +17,18 @@ class SurveyQuestion extends Model
         $this->question     = $question['question'];
         $this->data         = !empty($question['data']) ? json_encode($question['data']) : json_encode([]);
         $this->save();
+    }
+
+    public static function edit(array $question): bool
+    {
+        if ($question['type'] === 'text') {
+            $question['data'] = [];
+        }
+        return SurveyQuestion::where('id', $question['id'])->update($question);
+    }
+
+    public static function remove(array $questionsToDelete): bool
+    {
+        return SurveyQuestion::whereIn('id', $questionsToDelete)->delete();
     }
 }

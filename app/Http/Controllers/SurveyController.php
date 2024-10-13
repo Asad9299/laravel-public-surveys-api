@@ -120,7 +120,7 @@ class SurveyController extends Controller
             }
         }
 
-        $survey->update($data);
+        $survey->edit($data);
 
         $existingQuestions = $survey->questions->toArray();
 
@@ -131,24 +131,21 @@ class SurveyController extends Controller
 
         // To Delete the Question(s)
         if (!empty($questionsToDelete)) {
-            SurveyQuestion::whereIn('id', $questionsToDelete)->delete();
+            SurveyQuestion::remove($questionsToDelete);
         }
 
         // To Insert or Update the Question(s)
         foreach ($data['questions']  as $question) {
             if (in_array($question['id'], $existingQuestionIds)) {
                 // update
-                if ($question['type'] === 'text') {
-                    $question['data'] = [];
-                }
-                SurveyQuestion::where('id', $question['id'])->update($question);
+                SurveyQuestion::edit($question);
             } else {
                 // insert
                 $surveyQuestion = new SurveyQuestion();
                 $surveyQuestion->add($survey->id, $question);
             }
         }
-
+        $survey->load('questions');
         return new SurveyResource($survey);
     }
 
