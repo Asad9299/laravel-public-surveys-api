@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\SurveyQuestionTypes;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 class StoreSurveyRequest extends FormRequest
 {
@@ -43,7 +45,25 @@ class StoreSurveyRequest extends FormRequest
             'user_id'     => 'exists:users,id',
             'description' => 'nullable|string',
             'expire_date' => 'nullable|date|after:tomorrow',
-            'questions'   => 'array',
+            'questions'   => 'present|array',
+            'questions.*.question' => 'required|string|max:1000',
+            'questions.*.type' => ['required', new Enum(SurveyQuestionTypes::class)],
+            'questions.*.description' => 'nullable|string',
+            'questions.*.data' => [
+                'present',
+                'required_if:questions.*.type,' . SurveyQuestionTypes::Select->value . ',' . SurveyQuestionTypes::Radio->value . ',' . SurveyQuestionTypes::Checkbox->value,
+            ],
+            'questions.*.data.options' => [
+                'required_with:questions.*.data',
+                'array',
+                'min:1',
+            ],
+            'questions.*.data.options.*.text' => [
+                'required_with:questions.*.data.options',
+                'distinct'
+            ],
+            'questions.*.survey_id' => 'exists:App\Models\Survey,id'
+
         ];
     }
 }
