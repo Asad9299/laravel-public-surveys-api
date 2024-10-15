@@ -20,7 +20,7 @@ class Survey extends Model
 
     public static function list(int $user_id)
     {
-        return self::where('user_id', $user_id)->paginate();
+        return self::where('user_id', $user_id)->paginate(config('app.pagination.records_per_page'));
     }
 
     public function add(array $data)
