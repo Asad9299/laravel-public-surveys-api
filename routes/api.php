@@ -12,6 +12,9 @@ Route::get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('survey', SurveyController::class);
+
+    # Survey by Slug Route
+    Route::get('survey-by-slug/{survey:slug}', [SurveyController::class, 'getSurveyBySlug']);
 });
 
 # Register Route

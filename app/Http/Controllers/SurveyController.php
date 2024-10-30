@@ -159,4 +159,9 @@ class SurveyController extends Controller
         }
         return response('Something went wrong', 400);
     }
+
+    public function getSurveyBySlug(Survey $survey)
+    {
+        return new SurveyResource($survey);
+    }
 }
