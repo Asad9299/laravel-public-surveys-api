@@ -6,7 +6,10 @@ use App\Models\Survey;
 use App\Http\Requests\StoreSurveyRequest;
 use App\Http\Requests\UpdateSurveyRequest;
 use App\Http\Resources\SurveyResource;
+use App\Models\SurveyAnswer;
 use App\Models\SurveyQuestion;
+use App\Models\SurveyQuestionAnswer;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\File;
@@ -163,5 +166,36 @@ class SurveyController extends Controller
     public function getSurveyBySlug(Survey $survey)
     {
         return new SurveyResource($survey);
+    }
+
+    public function saveAnswers(Request $request, Survey $survey)
+    {
+        $answers = $request->all();
+
+        //
+        $surveyAnswer = SurveyAnswer::create([
+            'survey_id'  => $survey->id,
+            'start_date' => Carbon::now()->format('Y-m-d H:i:s'),
+            'end_date'   => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
+
+        foreach ($answers as $questionId => $answer) {
+            $surveyQuestion = SurveyQuestion::where([
+                'id'         => $questionId,
+                'survey_id'  => $survey->id
+            ])->first();
+
+            if (!$surveyQuestion) {
+                return response('Survey Question is not valid', 400);
+            }
+
+            SurveyQuestionAnswer::create([
+                'survey_question_id' => $questionId,
+                'survey_answer_id'   => $surveyAnswer->id,
+                'answer'             => is_array($answer) ? json_encode($answer) : $answer
+            ]);
+
+            return response('Answers recorded successfully', 201);
+        }
     }
 }
