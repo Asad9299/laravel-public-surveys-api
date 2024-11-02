@@ -18,6 +18,11 @@ class Survey extends Model
         return $this->hasMany(SurveyQuestion::class);
     }
 
+    public function answers()
+    {
+        return $this->hasMany(SurveyQuestion::class);
+    }
+
     public static function list(int $user_id)
     {
         return self::where('user_id', $user_id)->paginate(config('app.pagination.records_per_page'));
@@ -38,5 +43,15 @@ class Survey extends Model
     public function edit(array $data): bool
     {
         return $this->update($data);
+    }
+
+    public static function totalSurveys(User $user): int
+    {
+        return self::where('user_id', $user->id)->count();
+    }
+
+    public static function latestSurvey(User $user): int
+    {
+        return self::where('user_id', $user->id)->latest('created_at')->first();
     }
 }

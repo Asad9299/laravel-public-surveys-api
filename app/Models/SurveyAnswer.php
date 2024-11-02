@@ -18,6 +18,11 @@ class SurveyAnswer extends Model
         'end_date'
     ];
 
+    public function survey()
+    {
+        return $this->belongsTo(Survey::class);
+    }
+
     public static function add(int $surveyId): SurveyAnswer
     {
         return self::create([
@@ -25,5 +30,24 @@ class SurveyAnswer extends Model
             'start_date' => Carbon::now()->format('Y-m-d H:i:s'),
             'end_date'   => Carbon::now()->format('Y-m-d H:i:s')
         ]);
+    }
+
+    public static function totalAnswers(User $user): int
+    {
+        return self::query()
+            ->where('user_id', $user->id)
+            ->join('surveys', 'survey_answers.survey_id', '=', 'surveys.id')
+            ->latest('end_date')
+            ->count();
+    }
+
+    public static function latestAnswers(User $user): int
+    {
+        return self::query()
+            ->join('surveys', 'survey_answer.survey_id', '=', 'survey.id')
+            ->where('surveys.user_id', $user->id)
+            ->latest('end_date')
+            ->limit(5)
+            ->getModels('survey_answers.*');
     }
 }
