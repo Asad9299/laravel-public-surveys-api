@@ -50,7 +50,7 @@ class Survey extends Model
         return self::where('user_id', $user->id)->count();
     }
 
-    public static function latestSurvey(User $user): int
+    public static function latestSurvey(User $user): Survey
     {
         return self::where('user_id', $user->id)->latest('created_at')->first();
     }

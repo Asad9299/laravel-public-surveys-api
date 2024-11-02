@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SurveyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -11,6 +12,7 @@ Route::get('/user', function (Request $request) {
 
 
 Route::middleware('auth:sanctum')->group(function () {
+    # Survey CRUD Route
     Route::resource('survey', SurveyController::class);
 
     # Survey by Slug Route
@@ -18,6 +20,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     # Save Survey Question's Answers Route
     Route::post('survey/{survey}/answer', [SurveyController::class, 'saveAnswers']);
+
+    # Load Dashboard Data
+    Route::post('/dashboard', [DashboardController::class, 'index']);
 });
 
 # Register Route

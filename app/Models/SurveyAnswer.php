@@ -35,16 +35,16 @@ class SurveyAnswer extends Model
     public static function totalAnswers(User $user): int
     {
         return self::query()
-            ->where('user_id', $user->id)
             ->join('surveys', 'survey_answers.survey_id', '=', 'surveys.id')
+            ->where('surveys.user_id', $user->id)
             ->latest('end_date')
             ->count();
     }
 
-    public static function latestAnswers(User $user): int
+    public static function latestAnswers(User $user): array
     {
         return self::query()
-            ->join('surveys', 'survey_answer.survey_id', '=', 'survey.id')
+            ->join('surveys', 'survey_answers.survey_id', '=', 'surveys.id')
             ->where('surveys.user_id', $user->id)
             ->latest('end_date')
             ->limit(5)

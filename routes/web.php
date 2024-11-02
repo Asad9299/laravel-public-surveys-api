@@ -1,9 +1,9 @@
 <?php
 
+use App\Models\Survey;
+use App\Models\SurveyAnswer;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    print_R(phpinfo());
-    die;
     return view('welcome');
 });
