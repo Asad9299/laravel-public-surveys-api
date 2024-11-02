@@ -14,4 +14,13 @@ class SurveyQuestionAnswer extends Model
         'survey_answer_id',
         'answer'
     ];
+
+    public static function add(array $data): void
+    {
+        SurveyQuestionAnswer::create([
+            'survey_question_id' => $data['survey_question_id'],
+            'survey_answer_id'   => $data['survey_answer_id'],
+            'answer'             => is_array($data['answer']) ? json_encode($data['answer']) : $data['answer']
+        ]);
+    }
 }
