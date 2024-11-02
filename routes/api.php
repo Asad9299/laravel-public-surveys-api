@@ -17,7 +17,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('survey-by-slug/{survey:slug}', [SurveyController::class, 'getSurveyBySlug']);
 
     # Save Survey Question's Answers Route
-    Route::post('survey/{survey}', [SurveyController::class, 'saveAnswers']);
+    Route::post('survey/{survey}/answer', [SurveyController::class, 'saveAnswers']);
 });
 
 # Register Route

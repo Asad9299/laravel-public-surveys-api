@@ -22,7 +22,14 @@ class StoreSurveyQuestionAnswer extends FormRequest
     public function rules(): array
     {
         return [
-            'answers' => 'required|array|min:1', // Ensure at least one answer is given
+            'answers' => 'required|array'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'answers.required' => 'Please answer atleast one question to fill up the survey'
         ];
     }
 }
