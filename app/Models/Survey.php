@@ -20,7 +20,7 @@ class Survey extends Model
 
     public function answers()
     {
-        return $this->hasMany(SurveyQuestion::class);
+        return $this->hasMany(SurveyAnswer::class);
     }
 
     public static function list(int $user_id)
