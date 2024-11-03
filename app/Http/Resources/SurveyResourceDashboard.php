@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SurveyResource extends JsonResource
+class SurveyResourceDashboard extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -24,8 +24,9 @@ class SurveyResource extends JsonResource
             'slug'        => $this->slug,
             'expire_date' => Carbon::parse($this->expire_date)->format('Y-m-d'),
             'status'      => 1 === $this->status ? true : false,
+            'questions'   => $this->questions()->count(),
+            'answers'     => $this->answers()->count(),
             'created_at'  => Carbon::parse($this->created_at)->format('Y-m-d'),
-            'questions'   => SurveyQuestionResource::collection($this->questions),
         ];
     }
 }
