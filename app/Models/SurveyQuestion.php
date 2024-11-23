@@ -21,9 +21,6 @@ class SurveyQuestion extends Model
 
     public static function edit(array $question): bool
     {
-        if ($question['type'] === 'text') {
-            $question['data'] = [];
-        }
         return SurveyQuestion::where('id', $question['id'])->update($question);
     }
 
